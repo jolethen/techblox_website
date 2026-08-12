@@ -13,68 +13,142 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Custom Aesthetic Tweaks -->
+  <!-- 3D Aesthetics & Advanced Custom Animations -->
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #080c14;
+      background-color: #060911;
       color: #f1f5f9;
-      background-image: 
-        radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 80% 50%, rgba(30, 58, 138, 0.05) 0%, transparent 40%);
+      overflow-x: hidden;
     }
 
     .font-mono {
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Glassmorphism Panel */
+    /* ==================== 3D BACKGROUND SYSTEM ==================== */
+    .bg-3d-wrapper {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    /* Perspective Grid Mesh */
+    .bg-grid-perspective {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
+      background-image: 
+        linear-gradient(to right, rgba(6, 182, 212, 0.07) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(6, 182, 212, 0.07) 1px, transparent 1px);
+      background-size: 60px 60px;
+      transform: perspective(600px) rotateX(60deg);
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% { transform: perspective(600px) rotateX(60deg) translateY(0); }
+      100% { transform: perspective(600px) rotateX(60deg) translateY(60px); }
+    }
+
+    /* Ambient Floating Glow Orbs for Depth */
+    .orb-1 {
+      position: absolute;
+      top: 10%;
+      left: 15%;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
+      animation: orbFloat 14s ease-in-out infinite alternate;
+    }
+
+    .orb-2 {
+      position: absolute;
+      bottom: 20%;
+      right: 10%;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, rgba(30, 58, 138, 0.2) 0%, transparent 70%);
+      animation: orbFloat 18s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes orbFloat {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, -60px) scale(1.15); }
+    }
+
+    /* Vignette Overlay to Blend Edges */
+    .vignette-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, transparent 40%, #060911 95%);
+    }
+
+    /* ==================== GLASS & CARD ANIMATIONS ==================== */
     .glass-panel {
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      background: rgba(13, 19, 33, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
 
-    /* Cracked Logo Aura / Glow Effect */
+    /* Levitating Float Animation */
+    .animate-float {
+      animation: floatSlow 6s ease-in-out infinite;
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(0.5deg); }
+    }
+
+    /* 3D Interactive Tilt Cards */
+    .card-3d {
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-style: preserve-3d;
+      will-change: transform, box-shadow;
+    }
+
+    .card-3d:hover {
+      border-color: rgba(6, 182, 212, 0.5);
+      box-shadow: 
+        0 20px 35px -10px rgba(6, 182, 212, 0.25),
+        0 0 15px 0 rgba(6, 182, 212, 0.1) inset;
+    }
+
+    /* Cracked Logo Aura Effect */
     .logo-aura {
-      filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.25)) 
-              drop-shadow(0 0 45px rgba(2, 132, 199, 0.15))
-              drop-shadow(0 10px 15px rgba(0, 0, 0, 0.9));
-      transition: filter 0.3s ease;
-    }
-    .logo-aura:hover {
-      filter: drop-shadow(0 0 28px rgba(6, 182, 212, 0.45)) 
-              drop-shadow(0 0 60px rgba(2, 132, 199, 0.25))
-              drop-shadow(0 10px 15px rgba(0, 0, 0, 0.9));
+      filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.3)) 
+              drop-shadow(0 0 45px rgba(2, 132, 199, 0.2))
+              drop-shadow(0 15px 25px rgba(0, 0, 0, 0.95));
+      transition: filter 0.4s ease;
     }
 
-    /* Card Glow on Hover */
-    .feature-card {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .feature-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(6, 182, 212, 0.4);
-      box-shadow: 0 12px 30px -10px rgba(6, 182, 212, 0.15);
+    .logo-aura:hover {
+      filter: drop-shadow(0 0 35px rgba(6, 182, 212, 0.55)) 
+              drop-shadow(0 0 70px rgba(2, 132, 199, 0.35))
+              drop-shadow(0 15px 25px rgba(0, 0, 0, 0.95));
     }
 
     /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #080c14;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #1e293b;
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #0891b2;
-    }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #060911; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #0891b2; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-black">
+
+  <!-- ==================== 3D BACKGROUND LAYER ==================== -->
+  <div class="bg-3d-wrapper">
+    <div class="bg-grid-perspective"></div>
+    <div class="orb-1"></div>
+    <div class="orb-2"></div>
+    <div class="vignette-overlay"></div>
+  </div>
 
   <!-- ==================== NAVIGATION BAR ==================== -->
   <nav class="sticky top-0 z-50 glass-panel border-b border-slate-800/80">
@@ -107,7 +181,7 @@
           href="https://discord.gg/YOUR_DISCORD_LINK" 
           target="_blank" 
           rel="noopener noreferrer"
-          class="relative inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white transition-all duration-200 bg-slate-900 border border-cyan-500/40 rounded-xl hover:border-cyan-400 hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] active:scale-95"
+          class="relative inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold text-white transition-all duration-300 bg-slate-900 border border-cyan-500/40 rounded-xl hover:border-cyan-400 hover:shadow-[0_0_25px_rgba(6,182,212,0.4)] active:scale-95 hover:-translate-y-0.5"
         >
           <span class="mr-2">💬</span> Join Discord
         </a>
@@ -140,18 +214,18 @@
   <!-- ==================== HERO SECTION ==================== -->
   <header id="about" class="relative max-w-5xl mx-auto px-4 pt-16 pb-24 text-center flex flex-col items-center">
     
-    <!-- Hero Logo Showcase -->
-    <div class="mb-8 relative group">
+    <!-- Hero Logo Showcase (Floating) -->
+    <div class="mb-8 relative group animate-float">
       <img 
         src="logo.png" 
         alt="Techblox Main Logo" 
-        class="w-48 sm:w-64 md:w-80 h-auto object-contain logo-aura mx-auto transition-all duration-500 hover:scale-105"
+        class="w-48 sm:w-64 md:w-80 h-auto object-contain logo-aura mx-auto transition-all duration-500 group-hover:scale-105"
         onerror="this.onerror=null; this.src='logo.jpg';"
       >
     </div>
 
     <!-- Tagline Badge -->
-    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-950/40 text-cyan-400 font-mono text-xs tracking-widest uppercase mb-6 shadow-sm">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-cyan-500/30 bg-cyan-950/50 text-cyan-400 font-mono text-xs tracking-widest uppercase mb-6 shadow-[0_0_15px_rgba(6,182,212,0.15)]">
       <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
       Persistent Open-World MMO
     </div>
@@ -166,9 +240,9 @@
       Step into <b class="text-slate-200">Techblox</b> — an open-source sandbox server running on the Luanti engine. Claim territory, establish thriving settlements, trade with player factions, and make your mark on an infinite world.
     </p>
 
-    <!-- Server Connection Box -->
-    <div class="w-full max-w-md bg-slate-900/90 border border-slate-800 rounded-2xl p-4 sm:p-5 shadow-2xl backdrop-blur relative overflow-hidden group hover:border-slate-700 transition-colors">
-      <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all"></div>
+    <!-- Server Connection Box (Interactive 3D Glass Card) -->
+    <div class="card-3d card-3d-tilt w-full max-w-md bg-slate-900/80 border border-slate-800/90 rounded-2xl p-4 sm:p-5 shadow-2xl backdrop-blur relative overflow-hidden group">
+      <div class="absolute -right-10 -bottom-10 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/25 transition-all"></div>
       
       <div class="flex items-center justify-between gap-4 relative z-10">
         <div class="text-left font-mono">
@@ -182,7 +256,7 @@
         <button 
           onclick="copyIP()" 
           id="copy-btn"
-          class="px-4 py-2.5 bg-slate-800 hover:bg-cyan-600 text-slate-200 hover:text-white text-xs font-bold rounded-xl border border-slate-700 hover:border-cyan-500 transition-all active:scale-95 flex items-center gap-2 shrink-0"
+          class="px-4 py-2.5 bg-slate-800 hover:bg-cyan-600 text-slate-200 hover:text-white text-xs font-bold rounded-xl border border-slate-700 hover:border-cyan-500 transition-all active:scale-95 flex items-center gap-2 shrink-0 shadow-md"
         >
           <svg id="copy-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
@@ -194,7 +268,7 @@
   </header>
 
   <!-- ==================== HIGHLIGHTS SECTION ==================== -->
-  <section id="highlights" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-slate-800/60">
+  <section id="highlights" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-slate-800/60 relative">
     <div class="text-center mb-16">
       <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4">Core Server Highlights</h2>
       <p class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base">
@@ -202,13 +276,13 @@
       </p>
     </div>
 
-    <!-- 3x2 Grid -->
+    <!-- 3x2 Grid with 3D Mouse Tilt Effects -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       
       <!-- Card 1 -->
-      <div class="feature-card bg-slate-900/60 border border-slate-800 p-8 rounded-2xl flex flex-col justify-between">
+      <div class="card-3d card-3d-tilt bg-slate-900/60 border border-slate-800/80 p-8 rounded-2xl flex flex-col justify-between backdrop-blur">
         <div>
-          <div class="w-12 h-12 rounded-xl bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center text-2xl mb-6 shadow-inner">
+          <div class="w-12 h-12 rounded-xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-2xl mb-6 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
             🌍
           </div>
           <h3 class="text-xl font-bold text-white mb-3">Expansive Open World</h3>
@@ -219,9 +293,9 @@
       </div>
 
       <!-- Card 2 -->
-      <div class="feature-card bg-slate-900/60 border border-slate-800 p-8 rounded-2xl flex flex-col justify-between">
+      <div class="card-3d card-3d-tilt bg-slate-900/60 border border-slate-800/80 p-8 rounded-2xl flex flex-col justify-between backdrop-blur">
         <div>
-          <div class="w-12 h-12 rounded-xl bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center text-2xl mb-6 shadow-inner">
+          <div class="w-12 h-12 rounded-xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-2xl mb-6 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
             🏰
           </div>
           <h3 class="text-xl font-bold text-white mb-3">Base Building & Claims</h3>
@@ -232,9 +306,9 @@
       </div>
 
       <!-- Card 3 -->
-      <div class="feature-card bg-slate-900/60 border border-slate-800 p-8 rounded-2xl flex flex-col justify-between">
+      <div class="card-3d card-3d-tilt bg-slate-900/60 border border-slate-800/80 p-8 rounded-2xl flex flex-col justify-between backdrop-blur">
         <div>
-          <div class="w-12 h-12 rounded-xl bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center text-2xl mb-6 shadow-inner">
+          <div class="w-12 h-12 rounded-xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-2xl mb-6 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
             🤝
           </div>
           <h3 class="text-xl font-bold text-white mb-3">Player Economy & Trade</h3>
@@ -245,9 +319,9 @@
       </div>
 
       <!-- Card 4 -->
-      <div class="feature-card bg-slate-900/60 border border-slate-800 p-8 rounded-2xl flex flex-col justify-between">
+      <div class="card-3d card-3d-tilt bg-slate-900/60 border border-slate-800/80 p-8 rounded-2xl flex flex-col justify-between backdrop-blur">
         <div>
-          <div class="w-12 h-12 rounded-xl bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center text-2xl mb-6 shadow-inner">
+          <div class="w-12 h-12 rounded-xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-2xl mb-6 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
             ⚔️
           </div>
           <h3 class="text-xl font-bold text-white mb-3">Factions & Teams</h3>
@@ -258,9 +332,9 @@
       </div>
 
       <!-- Card 5 -->
-      <div class="feature-card bg-slate-900/60 border border-slate-800 p-8 rounded-2xl flex flex-col justify-between">
+      <div class="card-3d card-3d-tilt bg-slate-900/60 border border-slate-800/80 p-8 rounded-2xl flex flex-col justify-between backdrop-blur">
         <div>
-          <div class="w-12 h-12 rounded-xl bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center text-2xl mb-6 shadow-inner">
+          <div class="w-12 h-12 rounded-xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-2xl mb-6 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
             🌟
           </div>
           <h3 class="text-xl font-bold text-white mb-3">Dynamic Community Events</h3>
@@ -271,9 +345,9 @@
       </div>
 
       <!-- Card 6 -->
-      <div class="feature-card bg-slate-900/60 border border-slate-800 p-8 rounded-2xl flex flex-col justify-between">
+      <div class="card-3d card-3d-tilt bg-slate-900/60 border border-slate-800/80 p-8 rounded-2xl flex flex-col justify-between backdrop-blur">
         <div>
-          <div class="w-12 h-12 rounded-xl bg-cyan-950/60 border border-cyan-500/30 flex items-center justify-center text-2xl mb-6 shadow-inner">
+          <div class="w-12 h-12 rounded-xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-2xl mb-6 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
             📜
           </div>
           <h3 class="text-xl font-bold text-white mb-3">Open Sandbox Freedom</h3>
@@ -287,7 +361,7 @@
   </section>
 
   <!-- ==================== HOW TO JOIN GUIDE ==================== -->
-  <section id="join" class="bg-slate-900/40 border-y border-slate-800/80 py-20 relative">
+  <section id="join" class="bg-slate-900/30 border-y border-slate-800/80 py-20 relative backdrop-blur-sm">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div class="text-center mb-16">
@@ -298,21 +372,21 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 font-mono">
         
         <!-- Step 1 -->
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-start gap-4">
-          <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-500/30 font-bold text-lg shrink-0">
+        <div class="card-3d card-3d-tilt bg-slate-900/90 border border-slate-800 p-6 rounded-2xl flex items-start gap-4 shadow-xl">
+          <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-500/40 font-bold text-lg shrink-0 shadow-inner">
             01
           </span>
           <div>
             <h4 class="text-white font-bold text-base mb-1 font-sans">Launch Luanti / Minetest</h4>
             <p class="text-slate-400 text-xs font-sans leading-relaxed">
-              Download and install the free open-source client from <a href="https://www.luanti.org" target="_blank" class="text-cyan-400 underline">luanti.org</a>.
+              Download and install the free open-source client from <a href="https://www.luanti.org" target="_blank" class="text-cyan-400 underline hover:text-cyan-300">luanti.org</a>.
             </p>
           </div>
         </div>
 
         <!-- Step 2 -->
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-start gap-4">
-          <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-500/30 font-bold text-lg shrink-0">
+        <div class="card-3d card-3d-tilt bg-slate-900/90 border border-slate-800 p-6 rounded-2xl flex items-start gap-4 shadow-xl">
+          <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-500/40 font-bold text-lg shrink-0 shadow-inner">
             02
           </span>
           <div>
@@ -324,8 +398,8 @@
         </div>
 
         <!-- Step 3 -->
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-start gap-4">
-          <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-500/30 font-bold text-lg shrink-0">
+        <div class="card-3d card-3d-tilt bg-slate-900/90 border border-slate-800 p-6 rounded-2xl flex items-start gap-4 shadow-xl">
+          <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-500/40 font-bold text-lg shrink-0 shadow-inner">
             03
           </span>
           <div>
@@ -338,8 +412,8 @@
         </div>
 
         <!-- Step 4 -->
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-start gap-4">
-          <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-500/30 font-bold text-lg shrink-0">
+        <div class="card-3d card-3d-tilt bg-slate-900/90 border border-slate-800 p-6 rounded-2xl flex items-start gap-4 shadow-xl">
+          <span class="flex items-center justify-center w-10 h-10 rounded-xl bg-cyan-950 text-cyan-400 border border-cyan-500/40 font-bold text-lg shrink-0 shadow-inner">
             04
           </span>
           <div>
@@ -364,54 +438,5 @@
     <!-- Gallery Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       
-      <div class="group relative aspect-video bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
-        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent z-10 opacity-80 group-hover:opacity-40 transition-opacity"></div>
-        <div class="w-full h-full bg-slate-800 flex items-center justify-center text-slate-600 font-mono text-xs group-hover:scale-105 transition-transform duration-500">
-          [ World Landscape ]
-        </div>
-        <span class="absolute bottom-4 left-4 z-20 text-xs font-semibold text-slate-200">Wilderness Exploration</span>
-      </div>
-
-      <div class="group relative aspect-video bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
-        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent z-10 opacity-80 group-hover:opacity-40 transition-opacity"></div>
-        <div class="w-full h-full bg-slate-800 flex items-center justify-center text-slate-600 font-mono text-xs group-hover:scale-105 transition-transform duration-500">
-          [ Player Base ]
-        </div>
-        <span class="absolute bottom-4 left-4 z-20 text-xs font-semibold text-slate-200">Community Hub</span>
-      </div>
-
-      <div class="group relative aspect-video bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-lg">
-        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent z-10 opacity-80 group-hover:opacity-40 transition-opacity"></div>
-        <div class="w-full h-full bg-slate-800 flex items-center justify-center text-slate-600 font-mono text-xs group-hover:scale-105 transition-transform duration-500">
-          [ Faction Outpost ]
-        </div>
-        <span class="absolute bottom-4 left-4 z-20 text-xs font-semibold text-slate-200">Faction Outposts</span>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ==================== FOOTER ==================== -->
-  <footer class="border-t border-slate-800/80 bg-slate-950 py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
-      
-      <div class="flex items-center gap-3">
-        <img 
-          src="logo.png" 
-          alt="Techblox Footer Logo" 
-          class="h-8 w-auto object-contain opacity-80"
-          onerror="this.onerror=null; this.src='logo.jpg';"
-        >
-        <span class="text-sm font-bold text-slate-300">TECHBLOX SERVER</span>
-      </div>
-
-      <p class="text-xs text-slate-500 max-w-md">
-        Techblox is an open community server built on the open-source Luanti engine. Not affiliated with or endorsed by external game studios.
-      </p>
-
-      <div class="flex items-center gap-6 text-xs text-slate-400 font-semibold">
-        <a href="https://discord.gg/YOUR_DISCORD_LINK" target="_blank" class="hover:text-cyan-400 transition-colors">Discord</a>
-        <a href="https://github.com/YOUR_GITHUB_REPO" target="_blank" class="hover:text-cyan-400 transition-colors">GitHub Repository</a>
-      </div>
-
-    
+      <div class="card-3d group relative aspect-video bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+        <div class=
